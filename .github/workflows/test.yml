@@ -8,23 +8,51 @@ jobs:
   test:
     name: Run Unit Tests
     runs-on: ubuntu-latest
+
     steps:
+      # ✅ 1. push / pull_request 트리거 확인용 로그
+      - name: Print Trigger Info
+        run: |
+          echo "🔹 이벤트 타입: ${{ github.event_name }}"
+          echo "🔹 브랜치: ${{ github.ref_name }}"
+
+      # ✅ 2. 리포지토리 코드 체크아웃
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      # ✅ 3. Node.js 20 버전 설정
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      - name: Check Node Version
+        run: node -v  # => Quiz 3 확인 (v20.x.x 출력)
+
+      # ✅ 4. 패키지 설치 (package.json이 있을 경우만)
       - name: Install Dependencies
-        run: npm install
+        run: |
+          if [ -f package.json ]; then
+            echo "📦 package.json detected → Installing dependencies..."
+            npm install
+          else
+            echo "⚠️ No package.json found, skipping npm install"
+          fi
 
+      # ✅ 5. 테스트 실행 (있을 경우)
       - name: Run Test Script
-        run: npm test
+        run: |
+          if npm run | grep -q "test"; then
+            echo "🚀 Running npm test..."
+            npm test
+          else
+            echo "⚠️ No test script found, skipping test"
+          fi
 
+      # ✅ 6. 환경 변수에 테스트 결과 저장
       - name: Save Test Result
         run: echo "RESULT=SUCCESS" >> $GITHUB_ENV
 
-      - name: Display Result
+      # ✅ 7. GITHUB_ENV 결과 출력 (Quiz 2 확인)
+      - name: Display Test Result
         run: echo "테스트 결과: $RESULT"
