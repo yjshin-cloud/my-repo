@@ -55,4 +55,4 @@ jobs:
 
       # ✅ 7. GITHUB_ENV 결과 출력 (Quiz 2 확인)
       - name: Display Test Result
-        run: echo "테스트 결과: $RESULT"
+        run: echo "테스트 결과:" >> $RESULT
