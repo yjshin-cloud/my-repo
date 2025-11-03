@@ -27,4 +27,4 @@ jobs:
         run: echo "RESULT=SUCCESS" >> $GITHUB_ENV
 
       - name: Display Result
-        run: echo "테스트 결과: ${{ env.RESULT }}"
+        run: echo "테스트 결과: $RESULT"
