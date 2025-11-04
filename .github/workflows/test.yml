@@ -10,58 +10,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # ✅ Quiz 1 - 이벤트 타입 및 브랜치 표시
-      - name: Print Trigger Info
-        run: |
-          echo "===== [Quiz 1] 이벤트 정보 확인 ====="
-          echo "🔹 이벤트 타입: ${{ github.event_name }}"
-          echo "🔹 브랜치: ${{ github.ref_name }}"
-          echo "====================================="
-
-      # ✅ 코드 체크아웃
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # ✅ Node.js 설정
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # ✅ Quiz 3 - Node.js 버전 확인
-      - name: Check Node Version
-        run: |
-          echo "===== [Quiz 3] Node.js 버전 확인 ====="
-          node -v
-          echo "====================================="
-
-      # ✅ package.json 여부 확인 후 npm install
       - name: Install Dependencies
-        run: |
-          if [ -f package.json ]; then
-            echo "📦 package.json detected → Installing dependencies..."
-            npm install
-          else
-            echo "⚠️ No package.json found → Skipping installation"
-          fi
+        run: npm install
 
-      # ✅ 테스트 실행
       - name: Run Test Script
-        run: |
-          if npm run | grep -q "test"; then
-            echo "🚀 Running npm test..."
-            npm test
-          else
-            echo "⚠️ No test script found → Skipping test"
-          fi
+        run: npm test
 
-      # ✅ Quiz 2 - GITHUB_ENV 값 저장 및 출력
       - name: Save Test Result
         run: |
           echo "RESULT=SUCCESS" >> $GITHUB_ENV
 
-      - name: Display Test Result
+      - name: Display Result
         run: |
-          echo "===== [Quiz 2] GITHUB_ENV 출력 ====="
           echo "테스트 결과: $RESULT"
-          echo "==================================="
